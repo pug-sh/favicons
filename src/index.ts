@@ -1,6 +1,6 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
-import { FaviconFinder } from './lib/favicon-finder'
+import { createFaviconFinder } from './favicon'
 
 const app = new Hono<{ Bindings: CloudflareBindings }>()
 
@@ -32,7 +32,7 @@ app.get('/:domain{.+}', async (c) => {
   }
 
   // 3. Fetch from Google → DuckDuckGo
-  const favicon = await new FaviconFinder(fetch.bind(globalThis)).find(domain)
+  const favicon = await createFaviconFinder(fetch.bind(globalThis))(domain)
   if (!favicon) return c.text('Favicon not found', 404)
 
   const response = new Response(favicon.data, {
