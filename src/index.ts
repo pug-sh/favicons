@@ -36,9 +36,11 @@ app.get('/:domain{.+}', async (c) => {
   const favicon = await createFaviconFinder(fetch.bind(globalThis))(domain)
 
   if (!favicon) {
-    return new Response(FALLBACK_SVG, {
+    const response = new Response(FALLBACK_SVG, {
       headers: { 'content-type': 'image/svg+xml', 'cache-control': 'public, max-age=2592000' },
     })
+    c.executionCtx.waitUntil(cache.put(cacheKey, response.clone()))
+    return response
   }
 
   const response = new Response(favicon.data, {
