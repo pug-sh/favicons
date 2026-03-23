@@ -1,6 +1,7 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { createFaviconFinder } from './favicon'
+import FALLBACK_SVG from './fallback.svg?raw'
 
 const app = new Hono<{ Bindings: CloudflareBindings }>()
 
@@ -33,7 +34,12 @@ app.get('/:domain{.+}', async (c) => {
 
   // 3. Fetch from Google → DuckDuckGo
   const favicon = await createFaviconFinder(fetch.bind(globalThis))(domain)
-  if (!favicon) return c.text('Favicon not found', 404)
+
+  if (!favicon) {
+    return new Response(FALLBACK_SVG, {
+      headers: { 'content-type': 'image/svg+xml', 'cache-control': 'public, max-age=2592000' },
+    })
+  }
 
   const response = new Response(favicon.data, {
     headers: { ...headers, 'content-type': favicon.contentType },
