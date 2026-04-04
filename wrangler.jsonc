@@ -11,5 +11,8 @@
       "binding": "FAVICONS",
       "bucket_name": "favicons"
     }
-  ]
+  ],
+  "vars": {
+    "CANONICAL_ORIGIN": "https://favicons.garib.dev"
+  }
 }
