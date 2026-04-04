@@ -21,15 +21,21 @@ bunx wrangler r2 bucket create favicons
 
 Favicon API running on **Cloudflare Workers** using **Hono**, with **R2** as persistent storage and **Cloudflare edge cache** (`caches.default`) as CDN layer.
 
-- `src/index.ts` — Hono app; single `GET /:domain` route with 3-layer cache logic
-- `src/lib/favicon-finder.ts` — `FaviconFinder` class; `fetch` is injected via constructor. Tries Google Favicon API then DuckDuckGo.
-- `src/lib/types.ts` — shared types
+- `src/index.ts` — Hono app; single `GET /:domain{.+}` route with request normalization, domain parsing, and 3-layer cache logic
+- `src/favicon.ts` — `createFaviconFinder(fetchFn)` factory; tries Google Favicon API then DuckDuckGo with timeout + null-on-failure semantics
+- `src/fallback.svg` — raw SVG returned when no provider yields a favicon
 - `wrangler.jsonc` — Workers config; R2 binding (`FAVICONS`) and custom domain (`favicons.garib.dev`)
 
 ### Request flow
 
-1. **Edge cache** (`caches.default`) — 30 day TTL, shared across all users at the same PoP
+1. **Edge cache** (`caches.default`) — 30 day TTL, shared across all users at the same PoP (cache key ignores query string)
 2. **R2** (`env.FAVICONS`) — permanent storage, keyed by domain string
 3. **Google → DuckDuckGo** — fetched on first-ever request, then stored in R2 + edge cache via `waitUntil`
+
+### Route behavior notes
+
+- Route accepts plain domains or full URLs in `:domain` path segment.
+- Invalid domains return `400 Invalid domain` instead of throwing.
+- Successful responses set `cache-control: public, max-age=2592000` and content type from source metadata when available.
 
 After adding/changing bindings in `wrangler.jsonc`, run `bun run cf-typegen` to update `worker-configuration.d.ts`.

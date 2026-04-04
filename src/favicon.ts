@@ -1,7 +1,17 @@
 const FETCH_TIMEOUT_MS = 5000
 
+type FaviconPayload = {
+  data: ArrayBuffer
+  contentType: string
+}
+
+const PROVIDER_URLS = (domain: string) => [
+  `https://www.google.com/s2/favicons?sz=64&domain=https://${domain}`,
+  `https://icons.duckduckgo.com/ip3/${domain}.ico`,
+]
+
 export function createFaviconFinder(fetchFn: typeof fetch) {
-  async function tryFetch(url: string): Promise<{ data: ArrayBuffer; contentType: string } | null> {
+  async function tryFetch(url: string): Promise<FaviconPayload | null> {
     try {
       const response = await fetchFn(url, { signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) })
       if (!response.ok) return null
@@ -18,12 +28,7 @@ export function createFaviconFinder(fetchFn: typeof fetch) {
   }
 
   return async function find(domain: string) {
-    const urls = [
-      `https://www.google.com/s2/favicons?sz=64&domain=https://${domain}`,
-      `https://icons.duckduckgo.com/ip3/${domain}.ico`,
-    ]
-
-    for (const url of urls) {
+    for (const url of PROVIDER_URLS(domain)) {
       const result = await tryFetch(url)
       if (result) return result
     }
