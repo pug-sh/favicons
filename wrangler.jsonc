@@ -4,7 +4,7 @@
   "compatibility_date": "2025-08-03",
   "main": "./src/index.ts",
   "routes": [
-    { "pattern": "favicons.garib.dev", "custom_domain": true }
+    { "pattern": "favicons.pug.sh", "custom_domain": true }
   ],
   "r2_buckets": [
     {
@@ -13,6 +13,6 @@
     }
   ],
   "vars": {
-    "CANONICAL_ORIGIN": "https://favicons.garib.dev"
+    "CANONICAL_ORIGIN": "https://favicons.pug.sh"
   }
 }

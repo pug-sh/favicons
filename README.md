@@ -5,14 +5,14 @@ A favicon API running on Cloudflare Workers. Returns the favicon for any domain,
 ## Usage
 
 ```
-GET https://favicons.garib.dev/:domain
+GET https://favicons.pug.sh/:domain
 ```
 
 Examples:
 ```
-https://favicons.garib.dev/github.com
-https://favicons.garib.dev/google.com
-https://favicons.garib.dev/linear.app
+https://favicons.pug.sh/github.com
+https://favicons.pug.sh/google.com
+https://favicons.pug.sh/linear.app
 ```
 
 Returns the favicon image directly. CORS is open to all origins.

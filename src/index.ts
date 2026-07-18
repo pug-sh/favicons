@@ -269,7 +269,7 @@ function landingPageHtml(origin: string, canonicalOrigin: string): string {
   <body>
     <main>
       <section class="card">
-        <span class="badge">favicons.garib.dev</span>
+        <span class="badge">${new URL(canonicalOrigin).host}</span>
         <h1>favicon API</h1>
         <p class="subtitle">Get any website's favicon with one URL. Fast, simple, and free on Cloudflare.</p>
         <p class="example">

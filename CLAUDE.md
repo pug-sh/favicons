@@ -24,7 +24,7 @@ Favicon API running on **Cloudflare Workers** using **Hono**, with **R2** as per
 - `src/index.ts` — Hono app; single `GET /:domain{.+}` route with request normalization, domain parsing, and 3-layer cache logic
 - `src/favicon.ts` — `createFaviconFinder(fetchFn)` factory; tries Google Favicon API then DuckDuckGo with timeout + null-on-failure semantics
 - `src/fallback.svg` — raw SVG returned when no provider yields a favicon
-- `wrangler.jsonc` — Workers config; R2 binding (`FAVICONS`) and custom domain (`favicons.garib.dev`)
+- `wrangler.jsonc` — Workers config; R2 binding (`FAVICONS`) and custom domain (`favicons.pug.sh`)
 
 ### Request flow
 
