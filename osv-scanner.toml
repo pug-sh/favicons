@@ -1,0 +1,4 @@
+[[IgnoredVulns]]
+id = "GHSA-fc5q-39xc-vjpf"
+ignoreUntil = 2027-02-18
+reason = "picomatch has no fixed release; it reaches us only through vite, a dev tool that matches globs from our own config"
